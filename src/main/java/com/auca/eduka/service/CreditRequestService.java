@@ -11,11 +11,13 @@ import org.springframework.stereotype.Service;
 import com.auca.eduka.Domain.CreditRequest;
 import com.auca.eduka.Domain.CreditStatus;
 import com.auca.eduka.repository.CreditRequestRepository;
+import com.auca.eduka.repository.RepaymentRepository;
 
 @Service
 public class CreditRequestService {
     @Autowired
     private CreditRequestRepository creditRequestRepo;
+    @Autowired private RepaymentRepository repaymentRepo;
 
     public String saveCreditRequest(CreditRequest credit){
         if (credit.getRequestDate().isBefore(LocalDate.now())){
@@ -84,11 +86,15 @@ public class CreditRequestService {
     }
 
     public String deleteCreditRequest(UUID id){
-        if(!creditRequestRepo.existsById(id)){
+        Optional<CreditRequest> found = creditRequestRepo.findById(id);
+        if (found.isEmpty()){
             return "The credit request with that id does not exist";
         }
+        if (repaymentRepo.existsByCreditRequest(found.get())){
+            return "That credit request has repayments, delete them first";
+        }
         creditRequestRepo.deleteById(id);
-        return "Credit request deleted successfully";
+        return "Credit request delete successfully";
     }
 
 }

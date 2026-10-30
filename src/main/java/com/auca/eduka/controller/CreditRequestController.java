@@ -95,6 +95,9 @@ public class CreditRequestController {
         if(message.equals("The credit request with that id does not exist")){
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
         }
+        if (message.equals("That credit request has repayments, delete them first")){
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        }
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 }
