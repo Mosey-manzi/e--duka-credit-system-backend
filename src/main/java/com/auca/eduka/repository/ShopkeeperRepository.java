@@ -1,14 +1,14 @@
 package com.auca.eduka.repository;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.auca.eduka.Domain.Shop;
 import com.auca.eduka.Domain.Shopkeeper;
-import java.util.List;
-import com.auca.eduka.Domain.GoodsCategory;
 
 
 public interface ShopkeeperRepository extends JpaRepository<Shopkeeper, UUID>{
@@ -17,4 +17,6 @@ public interface ShopkeeperRepository extends JpaRepository<Shopkeeper, UUID>{
         WHERE LOWER(c.name) = LOWER(:name)
         """)
     List<Shopkeeper> findByGoodsCategoryName(@Param("name") String name);
+
+    boolean existsByShop(Shop shop);
 }

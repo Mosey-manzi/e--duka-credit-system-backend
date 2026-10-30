@@ -1,6 +1,5 @@
 package com.auca.eduka.controller;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -10,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,6 +34,12 @@ public class CreditRequestController {
     @PostMapping("/save")
     public ResponseEntity<String> save(@RequestBody CreditRequest credit){
         String message = creditServ.saveCreditRequest(credit);
+        if (message.equals("Credit request date cannot be in the past")){
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        }
+        if (message.equals("Shopkeeper already has an open credit request on that date")){
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        }
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
@@ -60,11 +66,25 @@ public class CreditRequestController {
         return creditServ.getAllCreditRequests();
     }
 
+    
+
     @PutMapping("/update/{id}")
     public ResponseEntity<String> update(@PathVariable UUID id, @RequestBody CreditRequest credit){
         String message = creditServ.updateCreditRequest(id, credit);
         if(message.equals("The credit request with that id does not exist")){
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<String> changeStatus(@PathVariable UUID id, @RequestParam CreditStatus status){
+        String message = creditServ.changeStatus(id, status);
+        if (message.equals("The credit request with that id does not exist")){
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        }
+        if (message.startsWith("Cannot change status")){
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(message, HttpStatus.OK);
     }

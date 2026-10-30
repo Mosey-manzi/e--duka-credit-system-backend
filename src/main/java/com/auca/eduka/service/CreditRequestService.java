@@ -18,8 +18,17 @@ public class CreditRequestService {
     private CreditRequestRepository creditRequestRepo;
 
     public String saveCreditRequest(CreditRequest credit){
+        if (credit.getRequestDate().isBefore(LocalDate.now())){
+            return "Credit request date cannot be in the past";
+        }
+        if (creditRequestRepo.existsByShopkeeperAndRequestDateAndStatusNot(
+            credit.getShopkeeper(), credit.getRequestDate(), CreditStatus.DECLINED
+        )){
+            return "Shopkeeper already has an open credit request on that date";
+        }
+        credit.setStatus(CreditStatus.REQUESTED);
         creditRequestRepo.save(credit);
-        return "Credit Request saved successfully";
+        return "Credit request saved successfully";
     }
     
     public List<CreditRequest> getAllCreditRequests(){
@@ -53,6 +62,25 @@ public class CreditRequestService {
         credit.setShopkeeper(newData.getShopkeeper());
         creditRequestRepo.save(credit);
         return "Credit request updated successfully";
+    }
+
+    public String changeStatus(UUID id, CreditStatus newStatus){
+        Optional<CreditRequest> found = creditRequestRepo.findById(id);
+        if (found.isEmpty()){
+            return "The credit request with that id does not exist";
+        }
+        CreditRequest credit = found.get();
+        CreditStatus current = credit.getStatus();
+        
+        Boolean allowed = 
+            (current == CreditStatus.REQUESTED && (newStatus == CreditStatus.APPROVED || newStatus == CreditStatus.DECLINED))
+            || (current == CreditStatus.APPROVED && (newStatus == CreditStatus.DISBURSED || newStatus == CreditStatus.DECLINED));
+        if (!allowed){
+            return "Cannot change status from " + current + " to " + newStatus;
+        }
+        credit.setStatus(newStatus);
+        creditRequestRepo.save(credit);
+        return "Credit request status updated successfully";
     }
 
     public String deleteCreditRequest(UUID id){

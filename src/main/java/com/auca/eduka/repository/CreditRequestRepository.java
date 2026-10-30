@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.auca.eduka.Domain.CreditRequest;
 import com.auca.eduka.Domain.CreditStatus; 
+import com.auca.eduka.Domain.Shopkeeper;
 
 @Repository
 public interface CreditRequestRepository extends JpaRepository<CreditRequest, UUID> {
@@ -16,4 +17,6 @@ public interface CreditRequestRepository extends JpaRepository<CreditRequest, UU
     List<CreditRequest> findByRequestDateBetweenOrderByRequestDateAsc(
         LocalDate start,
         LocalDate end);
+    
+    boolean existsByShopkeeperAndRequestDateAndStatusNot(Shopkeeper shopkeeper, LocalDate requestDate, CreditStatus status);
 }

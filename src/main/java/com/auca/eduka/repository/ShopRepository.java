@@ -1,6 +1,7 @@
 package com.auca.eduka.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,7 @@ public interface ShopRepository extends JpaRepository<Shop, UUID> {
         ORDER BY s.shopNumber
         """)
     List<Shop> findFreeShops();
+    
+    Optional<Shop> findByShopNumber(int shopNumber);
 
 }
