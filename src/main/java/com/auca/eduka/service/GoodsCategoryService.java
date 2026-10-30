@@ -25,6 +25,10 @@ public class GoodsCategoryService {
         return goodsCategoryRepo.findAll();
     }
 
+    public List<GoodsCategory> getUnusedCategories(){
+        return goodsCategoryRepo.findUnusedCategories();
+    }
+
     public Optional<GoodsCategory> getGoodsCategoryById(UUID id){
         return goodsCategoryRepo.findById(id);
     }

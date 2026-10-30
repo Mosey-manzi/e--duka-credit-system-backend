@@ -30,7 +30,7 @@ public class GoodsCategory {
 
     }
 
-    public GoodsCategory(String name, List shopkeepers) {
+    public GoodsCategory(String name, List<Shopkeeper> shopkeepers) {
         this.name = name;
         this.shopkeepers = shopkeepers;
     }
@@ -39,6 +39,6 @@ public class GoodsCategory {
     public String getName(){return name;}
     public void setName(String name){this.name = name;}
     public List<Shopkeeper> getShopkeepers(){return shopkeepers;}
-    public void setShopkeeper(List<Shopkeeper> shopkeepers){ this.shopkeepers = shopkeepers;}
+    public void setShopkeepers(List<Shopkeeper> shopkeepers){ this.shopkeepers = shopkeepers;}
 
 }

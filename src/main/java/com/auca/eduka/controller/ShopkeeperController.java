@@ -1,15 +1,24 @@
 package com.auca.eduka.controller;
 
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.auca.eduka.Domain.Shopkeeper;
 import com.auca.eduka.service.ShopkeeperService;
+
 
 @RestController
 @RequestMapping("/api/shopkeeper")
@@ -23,6 +32,15 @@ public class ShopkeeperController {
         String message = keeperServ.saveShopkeeper(keeper);
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
+
+    @GetMapping("/by-goods-category")
+    public ResponseEntity<List<Shopkeeper>> getByGoodsCategory(@RequestParam String name){
+        return new ResponseEntity<>(keeperServ.getShopKeepersByGoodsCategory(name), HttpStatus.OK);
+    }
+    public String getMethodName(@RequestParam String param) {
+        return new String();
+    }
+    
 
     @GetMapping("/all")
     public List<Shopkeeper> getAll(){

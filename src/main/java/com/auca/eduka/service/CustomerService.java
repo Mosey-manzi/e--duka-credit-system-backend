@@ -9,15 +9,25 @@ import org.springframework.stereotype.Service;
 
 import com.auca.eduka.Domain.Customer;
 import com.auca.eduka.repository.CustomerRepository;
+import com.auca.eduka.repository.ShopkeeperRepository;
 
 @Service
 public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired 
+    private ShopkeeperRepository shopkeeperRepo;
 
     public String saveCustomer(Customer customer){
         customerRepository.save(customer);
         return "Customer saved successfully";
+    }
+
+    public Optional<List<Customer>> getCustomerOfShopkeeper(UUID shopkeeperId){
+        if (!shopkeeperRepo.existsById(shopkeeperId)){
+            return Optional.empty();
+        }
+        return Optional.of(customerRepository.findCustomersOfShopkeeper(shopkeeperId));
     }
 
     public List<Customer> getAllCustomers(){

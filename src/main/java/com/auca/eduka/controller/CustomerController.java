@@ -42,6 +42,16 @@ public class CustomerController {
             customerService.findCustomerByLastName(lastName), HttpStatus.OK
         );
     }
+
+    @GetMapping("/of-shopkeeper/{shopkeeperId}")
+    public ResponseEntity<?> getCustomersOfShopkeeper(@PathVariable UUID shopkeeperId) {
+        Optional<List<Customer>> customers = customerService.getCustomerOfShopkeeper(shopkeeperId);
+        if (customers.isEmpty()){
+            return new ResponseEntity<>("The shopkeeper with that id does not exist", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(customers.get(), HttpStatus.OK);
+    }
+    
     
 
     @GetMapping("/all")

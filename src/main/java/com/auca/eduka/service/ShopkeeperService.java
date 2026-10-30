@@ -1,14 +1,14 @@
 package com.auca.eduka.service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.Optional;
+import java.util.UUID;
 
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.auca.eduka.repository.ShopkeeperRepository;
 import com.auca.eduka.Domain.Shopkeeper;
+import com.auca.eduka.repository.ShopkeeperRepository;
 
 @Service
 public class ShopkeeperService {
@@ -23,6 +23,10 @@ public class ShopkeeperService {
 
     public List<Shopkeeper> getAllShopkeepers(){
         return shopkeeperRepo.findAll();
+    }
+
+    public List<Shopkeeper> getShopKeepersByGoodsCategory(String name){
+        return shopkeeperRepo.findByGoodsCategoryName(name);
     }
 
     public Optional<Shopkeeper> getShopkeeperById(UUID id){

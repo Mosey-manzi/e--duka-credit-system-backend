@@ -25,6 +25,10 @@ public class ShopService {
         return shopRepo.findAll();
     }
 
+    public List<Shop> getFreeShops(){
+        return shopRepo.findFreeShops();
+    }
+
     public Optional<Shop> getShopById(UUID id){
         return shopRepo.findById(id);
     }
