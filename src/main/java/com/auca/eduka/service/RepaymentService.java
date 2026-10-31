@@ -35,6 +35,10 @@ public class RepaymentService {
         return "Repayment saved successfully";
     }
 
+    public List<Repayment> getAllRepayments(){
+        return repaymentRepo.findAll();
+    }
+
     public List<Repayment> getRepaymentsOfCustomer(String nationalId){
         return repaymentRepo.findByCustomerNationalId(nationalId);
         

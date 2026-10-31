@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.auca.eduka.Domain.CreditRequest;
 import com.auca.eduka.Domain.CreditStatus;
@@ -95,6 +96,16 @@ public class CreditRequestService {
         }
         creditRequestRepo.deleteById(id);
         return "Credit request delete successfully";
+    }
+
+    public List<Object[]> getStatsByStatus(){
+        return creditRequestRepo.countByStatusGroup();
+    }
+    
+    @Transactional 
+    public String cancelDay(UUID shopkeeperId, LocalDate date){
+        int count = creditRequestRepo.cancelDay(shopkeeperId, date, CreditStatus.DECLINED, CreditStatus.DISBURSED);
+        return count + " credit requests cancelled";
     }
 
 }

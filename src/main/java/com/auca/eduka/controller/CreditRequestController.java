@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -59,6 +60,11 @@ public class CreditRequestController {
             (startDate, endDate),
             HttpStatus.OK);
     }
+
+    @GetMapping("/stats/by-status")
+    public List<Object[]> getStatusByStatus(){
+        return creditServ.getStatsByStatus();
+    }
     
 
     @GetMapping("/all")
@@ -89,6 +95,12 @@ public class CreditRequestController {
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+    @PatchMapping ("/cancel-day")
+    public ResponseEntity<String> cancelDay(@RequestParam UUID shopkeeperId, @RequestParam String date){ 
+        String message = creditServ.cancelDay(shopkeeperId, LocalDate.parse(date));
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable UUID id){
         String message = creditServ.deleteCreditRequest(id);
@@ -100,4 +112,5 @@ public class CreditRequestController {
         }
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
+
 }

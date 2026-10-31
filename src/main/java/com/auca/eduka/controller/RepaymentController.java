@@ -37,6 +37,12 @@ public class RepaymentController {
         return new ResponseEntity<>(message, HttpStatus.CREATED);
     }
 
+    @GetMapping("/all")
+    public List<Repayment> getAll(){
+        return repaymentServ.getAllRepayments();
+    }
+    
+
     @GetMapping("/customers/{nationalId}")
     public List<Repayment> getByCustomer(@PathVariable  String nationalId){
         return repaymentServ.getRepaymentsOfCustomer(nationalId);
