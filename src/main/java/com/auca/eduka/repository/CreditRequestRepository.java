@@ -39,4 +39,7 @@ public interface CreditRequestRepository extends JpaRepository<CreditRequest, UU
                 @Param ("declined") CreditStatus declined,
                 @Param ("disbursed") CreditStatus disbursed            
                 );
+    
+    long countByStatus(CreditStatus status);
+    long countByRequestDate(LocalDate requestDate);
 }
